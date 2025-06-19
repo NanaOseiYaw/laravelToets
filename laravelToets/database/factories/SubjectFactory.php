@@ -21,7 +21,7 @@ class SubjectFactory extends Factory
     return [
         'name' => $this->faker->word,
         'description' => $this->faker->sentence(),
-        //'teacher_id' => Teacher::factory(),
+        'teacher_id' => Teacher::inRandomOrder()->first()->id ?? Teacher::factory(),
         ];
     }
 }

@@ -21,15 +21,20 @@ class SubjectController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+        $validated = $request->validate([
+            'name'=>'required',
+            'description' => 'nullable',
+            'teacher_id' => 'required|exists:docents,id',
+        ]);
 
+        return Subject::create($validated);
+    }
     /**
      * Display the specified resource.
      */
     public function show(string $id)
     {
-        //
+        return Subject::with('teacher')->findOrFail($id);
     }
 
     /**
@@ -37,14 +42,16 @@ class SubjectController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $vak = Subject::findOrFail($id);
+        $vak->update($request->all());
+        return $vak;
     }
-
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
     {
-        //
+        Subject::destroy($id);
+        return response()->noContent();
     }
 }

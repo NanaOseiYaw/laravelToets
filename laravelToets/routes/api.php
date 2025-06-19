@@ -1,30 +1,31 @@
 <?php
-use App\Http\Controllers\API\TeacherController;
-use App\Http\Controllers\API\SubjectController;
+
+use App\Http\Controllers\Api\TeacherController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\ViewController;
+use App\Models\Subject;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\ValidationException;
-use App\Models\User;
 
-Route::post('/login', function (Request $request) {
-    $request->validate([
-        'email' => '',
-        'password' => ''
-    ]);
+Route::get('/user', function (Request $request) {
+    return $request->user();
+})->middleware('auth:sanctum');
 
-    $user = User::where('email', $request->email)->first();
-
-    if (! $user || ! Hash::check($request->password, $user->password)) {
-        throw ValidationException::withMessages([
-            'email' => ['De inloggegevens kloppen niet.'],
-        ]);
-    }
-
-    return ['token' => $user->createToken('api-token')->plainTextToken];
+//authenticatie route
+Route::post('/login',[AuthController::class,'login']);
+Route::middleware('auth:sanctum')->group(function(){
+    Route::apiResource('teachers',TeacherController::class);
+    Route::apiResource('subjects',Subject::class);
 });
 
-Route::middleware('auth:sanctum')->group(function () {
-    Route::apiResource('teachers', TeacherController::class);
-    Route::apiResource('subjects', SubjectController::class);
-});
+//register
+Route::post('/register', [RegisterController::class, 'create']);
+
+//route voor docenten en vakken
+Route::apiResource('teachers', App\Http\Controllers\Api\TeacherController::class);
+Route::apiResource('subjects',App\Http\Controllers\Api\TeacherController::class);
+
+//overzicht van alle data
+Route::get('/subject-overview',[ViewController::class,'subjects']);
+Route::get('/teacher-overview',[ViewController::class,'teachers']);
