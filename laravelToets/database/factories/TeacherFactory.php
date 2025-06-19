@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Models\Teacher;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,10 +17,9 @@ class TeacherFactory extends Factory
    public function definition(): array
     {
     return [
-        'name' => $this->faker->word,
-        'description' => $this->faker->sentence,
-        'teacher_id' => Teacher::factory(),
-        ];
+        'name' => $this->faker->name,
+        'hobby' => $this->faker->randomElement(['Gitaar spelen', 'Schaken', 'Lezen', 'Fietsen']),
+    ];
     }
 
 }

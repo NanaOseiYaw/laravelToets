@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Teacher;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -14,11 +15,13 @@ class SubjectFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    public function definition(): array
+   
+     public function definition(): array
     {
     return [
-        'name' => $this->faker->name,
-        'hobby' => $this->faker->word,
-    ];
+        'name' => $this->faker->word,
+        'description' => $this->faker->sentence(),
+        //'teacher_id' => Teacher::factory(),
+        ];
     }
 }

@@ -2,17 +2,19 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\Teacher;
+use App\Models\Subject;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     */
-    public function run(): void
+    public function run()
     {
-    \App\Models\Teacher::factory(5)->hasSubjects(3)->create();
+        Teacher::factory(5)->create()->each(function ($teacher) {
+            // Maak per docent 1-3 vakken aan
+            Subject::factory(rand(1,3))->create([
+                'teacher_id' => $teacher->id,
+            ]);
+        });
     }
 }
